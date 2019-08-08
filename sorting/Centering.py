@@ -1,10 +1,9 @@
 from LinkedList import LinkedList
 from sorting.Criteria import Criteria
 
-class Tuples(Criteria):
+class Centering(Criteria):
 
-    def __init__(self, elements, *args, **kwargs):
-        self.elements = elements
+    def __init__(self, *args, **kwargs):
         return super().__init__(*args, **kwargs)
 
     def sort(self, original, asc=True):
@@ -12,14 +11,17 @@ class Tuples(Criteria):
         dictionary = original.count_elements()
         last = 1 if asc else 0
         first = 0 if asc else 1
+        push = True
         while dictionary[first] > 0 or dictionary[last] > 0:
             value = first if dictionary[first] > 0 else last
-            for i in range(self.elements * 2):
-                if i == self.elements:
-                    value = last if dictionary[last] > 0 else first
-                if dictionary[value] > 0:
+            for i in range(original.length):
+                if dictionary[first] == 0 and dictionary[last] > 0:
+                    value = last
+                if push:
                     ls.push(value)
-                    dictionary[value] -= 1
+                    push = False
                 else:
-                    break
+                    ls.add_first(value)
+                    push = True
+                dictionary[value] -= 1
         return ls.head
